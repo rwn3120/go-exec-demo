@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-    var configFile = flag.String("config", "", "path to config file")
+    var configFile = flag.String("config", "config.yaml", "path to config file")
     flag.Parse()
 
     if strings.TrimSpace(*configFile) == "" {

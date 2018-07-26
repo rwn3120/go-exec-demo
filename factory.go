@@ -9,8 +9,8 @@ type Factory struct {
     configuration *Configuration
 }
 
-func (f *Factory) Handler(uuid string) exec.Handler {
-    return &Handler{
+func (f *Factory) Processor(uuid string) exec.Processor {
+    return &Processor{
         uuid:          uuid,
         configuration: f.configuration,
         logger:        logger.New(uuid+"-handler", f.configuration.Logger)}

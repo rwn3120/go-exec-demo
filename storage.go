@@ -5,13 +5,12 @@ import (
     "github.com/rwn3120/go-logger"
     "github.com/rwn3120/go-conf"
     "github.com/rwn3120/go-exec"
-    "github.com/satori/go.uuid"
 )
 
 type Configuration struct {
-    Name               string
-    Logger             *logger.Configuration
-    Executor           *exec.Configuration
+    Name     string
+    Logger   *logger.Configuration
+    Executor *exec.Configuration
 }
 
 func (c Configuration) Validate() *[]string {
@@ -63,18 +62,20 @@ func (b *Storage) Put(key string, value string) error {
     callback := func(result exec.Result) {
         channel <- result
     }
-    b.executor.Fire(&Put{
-        id:    uuid.NewV4().String(),
+    b.executor.FireJob(&Put{
         key:   key,
         value: value},
         callback)
     result := <-channel
-    return result.Error()
+    return result.Err()
 }
 
 func (b *Storage) Get(key string) (string, error) {
-    result := b.executor.Execute(&Get{
-        id:  uuid.NewV4().String(),
-        key: key}).(*GetResult)
-    return result.value, result.error
+    get := &Get{key: key}
+    result, err := b.executor.ExecuteJob(get)
+    if err != nil {
+        return "", err
+    }
+    getResult := result.(*GetResult)
+    return getResult.value, getResult.error
 }
