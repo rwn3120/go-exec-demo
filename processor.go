@@ -30,14 +30,14 @@ func (p *Processor) Destroy() {
 
 func (p *Processor) Process(payload exec.Payload) exec.Result {
     p.logger.Trace("Processing payload")
-    switch j := payload.(type) {
+    switch payload := payload.(type) {
     case *Put:
-        err := p.storageClient.Put(j.key, j.value)
+        err := p.storageClient.Put(payload.key, payload.value)
         return exec.NewResult(err)
     case *Get:
-        value, err := p.storageClient.Get(j.key)
+        value, err := p.storageClient.Get(payload.key)
         return &GetResult{value, err}
     default:
-        return exec.NewResult(errors.New(fmt.Sprintf("unknown payload")))
+        return exec.Nok(errors.New(fmt.Sprintf("unsupoorted payload")))
     }
 }
