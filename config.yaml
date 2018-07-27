@@ -2,9 +2,7 @@ name: "storage"
 logger:
   level: INFO
 executor:
-  workerscount:    7000
-  workerheartbeat: 5s
-  registrationtimeout: 100ms
-  callbackheartbeat:   100ms
+  workers:    7000
+  heartbeat: 5s
   logger:
     level: WARN

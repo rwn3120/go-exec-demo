@@ -3,17 +3,20 @@ package main
 import (
     "github.com/rwn3120/go-logger"
     "github.com/rwn3120/go-exec"
+    "fmt"
 )
 
 type Factory struct {
     configuration *Configuration
+    counter int
 }
 
-func (f *Factory) Processor(uuid string) exec.Processor {
+func (f *Factory) Processor() exec.Processor {
+    f.counter++
+    uuid := fmt.Sprintf("%s-processor-%d", f.configuration.Name, f.counter)
     return &Processor{
-        uuid:          uuid,
         configuration: f.configuration,
-        logger:        logger.New(uuid+"-handler", f.configuration.Logger)}
+        logger:        logger.New(uuid      , f.configuration.Logger)}
 }
 
 func NewFactory(configuration *Configuration) exec.Factory {
