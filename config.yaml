@@ -1,8 +1,8 @@
 name: "storage"
 logger:
-  level: TRACE
+  level: WARN
 executor:
-  workers:    7000
+  workers:   7000
   heartbeat: 5s
   logger:
-    level: TRACE
+    level: WARN
