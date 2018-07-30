@@ -1,9 +1,5 @@
 package main
 
-type Session struct {
-    uuid string
-}
-
 type Get struct {
     session *Session
     key     string

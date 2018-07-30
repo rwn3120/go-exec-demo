@@ -19,7 +19,7 @@ func main() {
     conf.LoadYamlAndCheck(*configFile, configuration)
     conf.PrintYaml(configuration)
 
-    storage := New(configuration)
+    runtime := Production(configuration)
     type res struct {
         status bool
         key    string
@@ -32,7 +32,7 @@ func main() {
         go func(i int) {
             key := fmt.Sprintf("key-%08d", i)
             value := fmt.Sprintf("%d", i)
-            storage := storage.Session(fmt.Sprintf("session-%08d", i))
+            storage, _ := runtime.Storage(fmt.Sprintf("session-%08d", i))
             storage.Put(key, value)
             storedValue, _ := storage.Get(key)
             if value == storedValue {
@@ -52,5 +52,5 @@ func main() {
         }
     }
     fmt.Printf("Done [%v]\n", time.Since(startTime))
-    storage.Destroy()
+    runtime.Destroy()
 }

@@ -10,23 +10,23 @@ import (
 var lock = sync.RWMutex{}
 var store = make(map[string]string)
 
-type StorageMockupClient struct {
+type StorageClientMockup struct {
     connected bool
 }
 
-func (p *StorageMockupClient) Connect() {
+func (p *StorageClientMockup) Connect() {
     p.connected = true
 }
 
-func (p *StorageMockupClient) Disconnect() {
+func (p *StorageClientMockup) Disconnect() {
     p.connected = false
 }
 
-func (p *StorageMockupClient) Connected() bool {
+func (p *StorageClientMockup) Connected() bool {
     return p.connected
 }
 
-func (p *StorageMockupClient) Get(key string) (string, error) {
+func (p *StorageClientMockup) Get(key string) (string, error) {
     if !p.Connected(){
         return "", errors.New("connection error")
     }
@@ -45,7 +45,7 @@ func (p *StorageMockupClient) Get(key string) (string, error) {
     }
 }
 
-func (p StorageMockupClient) Put(key string, value string) error {
+func (p StorageClientMockup) Put(key string, value string) error {
     if !p.Connected(){
         return errors.New("connection error")
     }
