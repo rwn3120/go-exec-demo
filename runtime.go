@@ -24,7 +24,7 @@ func (b *Runtime) Destroy() {
 
 func (b *Runtime) Storage(uuid string) (*Storage, error) {
     b.logger.Trace("Creating executor %s", uuid)
-    storage :=  &Storage{
+    storage := &Storage{
         session:  &Session{uuid},
         executor: b.executor,
     }

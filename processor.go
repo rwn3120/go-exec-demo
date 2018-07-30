@@ -45,7 +45,7 @@ func (p *Processor) Process(payload exec.Payload) exec.Result {
 
 type ProcessorFactory struct {
     configuration *Configuration
-    counter int
+    counter       int
 }
 
 func (f *ProcessorFactory) Processor() exec.Processor {
@@ -53,5 +53,5 @@ func (f *ProcessorFactory) Processor() exec.Processor {
     uuid := fmt.Sprintf("%s-processor-%d", f.configuration.Name, f.counter)
     return &Processor{
         configuration: f.configuration,
-        logger:        logger.New(uuid      , f.configuration.Logger)}
+        logger:        logger.New(uuid, f.configuration.Logger)}
 }

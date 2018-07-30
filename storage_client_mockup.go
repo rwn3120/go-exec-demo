@@ -27,7 +27,7 @@ func (p *StorageClientMockup) Connected() bool {
 }
 
 func (p *StorageClientMockup) Get(key string) (string, error) {
-    if !p.Connected(){
+    if !p.Connected() {
         return "", errors.New("connection error")
     }
 
@@ -46,7 +46,7 @@ func (p *StorageClientMockup) Get(key string) (string, error) {
 }
 
 func (p StorageClientMockup) Put(key string, value string) error {
-    if !p.Connected(){
+    if !p.Connected() {
         return errors.New("connection error")
     }
 

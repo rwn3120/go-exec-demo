@@ -5,7 +5,6 @@ import (
     "errors"
 )
 
-
 type Session struct {
     uuid string
 }
