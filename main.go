@@ -32,6 +32,7 @@ func main() {
         go func(i int) {
             key := fmt.Sprintf("key-%08d", i)
             value := fmt.Sprintf("%d", i)
+            storage := storage.Session(fmt.Sprintf("session-%08d", i))
             storage.Put(key, value)
             storedValue, _ := storage.Get(key)
             if value == storedValue {

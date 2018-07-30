@@ -57,12 +57,13 @@ func (b *Storage) Destroy() {
     b.executor.Destroy()
 }
 
-func (b *Storage) Put(key string, value string) error {
+func (b *Storage) put(session *Session, key, value string) error {
     channel := make(chan exec.Result)
     callback := func(result exec.Result) {
         channel <- result
     }
     b.executor.FireJob(&Put{
+        session: session,
         key:   key,
         value: value},
         callback)
@@ -70,12 +71,32 @@ func (b *Storage) Put(key string, value string) error {
     return result.Err()
 }
 
-func (b *Storage) Get(key string) (string, error) {
-    get := &Get{key: key}
+func (b *Storage) get(session *Session, key string) (string, error) {
+    get := &Get{session: session, key: key}
     result, err := b.executor.ExecuteJob(get)
     if err != nil {
         return "", err
     }
     getResult := result.(*GetResult)
     return getResult.value, getResult.error
+}
+
+func (b *Storage) Session(uuid string) *StorageSession {
+    return &StorageSession{
+        session: &Session{uuid},
+        storage: b,
+    }
+}
+
+type StorageSession struct {
+    session *Session
+    storage *Storage
+}
+
+func (s *StorageSession) Put(key, value string) error {
+    return s.storage.put(s.session, key, value)
+}
+
+func (s *StorageSession) Get(key string) (string, error) {
+    return s.storage.get(s.session, key)
 }

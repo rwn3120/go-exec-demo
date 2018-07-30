@@ -29,15 +29,33 @@ func (p *Processor) Destroy() {
 }
 
 func (p *Processor) Process(payload exec.Payload) exec.Result {
-    p.logger.Trace("Processing payload")
     switch payload := payload.(type) {
     case *Put:
+        p.logger.Info("[%s] Put: %10s <- %s", payload.session.uuid, payload.key, payload.value)
         err := p.storageClient.Put(payload.key, payload.value)
         return exec.NewResult(err)
     case *Get:
+        p.logger.Info("[%s] Get: %10s", payload.session.uuid, payload.key)
         value, err := p.storageClient.Get(payload.key)
         return &GetResult{value, err}
     default:
         return exec.Nok(errors.New(fmt.Sprintf("unsupoorted payload")))
     }
+}
+
+type Factory struct {
+    configuration *Configuration
+    counter int
+}
+
+func (f *Factory) Processor() exec.Processor {
+    f.counter++
+    uuid := fmt.Sprintf("%s-processor-%d", f.configuration.Name, f.counter)
+    return &Processor{
+        configuration: f.configuration,
+        logger:        logger.New(uuid      , f.configuration.Logger)}
+}
+
+func NewFactory(configuration *Configuration) exec.Factory {
+    return &Factory{configuration: configuration}
 }

@@ -1,7 +1,12 @@
 package main
 
+type Session struct {
+    uuid string
+}
+
 type Get struct {
-    key          string
+    session *Session
+    key     string
 }
 
 type GetResult struct {
@@ -14,6 +19,7 @@ func (gr *GetResult) Err() error {
 }
 
 type Put struct {
-    key    string
-    value  string
+    session *Session
+    key     string
+    value   string
 }
