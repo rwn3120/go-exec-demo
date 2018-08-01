@@ -2,7 +2,6 @@ package main
 
 import (
     "github.com/rwn3120/go-exec"
-    "errors"
 )
 
 type Session struct {
@@ -34,9 +33,8 @@ func (s *Storage) Get(key string) (string, error) {
     if err != nil {
         return "", err
     }
-    getResult, ok := result.(*GetResult)
-    if !ok {
-        return "", errors.New("unexpected result")
+    if getResult, ok := result.(*GetResult); ok {
+        return getResult.value, getResult.error
     }
-    return getResult.value, getResult.error
+    return "", exec.Unexpected(result)
 }
